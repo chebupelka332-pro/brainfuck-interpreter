@@ -1,6 +1,7 @@
 module BrainfuckUtils where
 
 import Data.Char (ord, chr, toLower)
+import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
 
 -- Список допустимых команд Brainfuck
@@ -17,9 +18,7 @@ stringToNumber s
     | otherwise = Just (ord (head s))
 
 extract :: Maybe Int -> Int
-extract m = case m of
-    Just n  -> n
-    Nothing -> 0  -- Значение по умолчанию
+extract = Data.Maybe.fromMaybe 0   -- Значение по умолчанию
 
 -- Определение специальных символов по их ASCII-кодам
 asciiSpecial :: Int -> String
@@ -31,13 +30,13 @@ asciiSpecial n = case n of
     4   -> "EOT"
     5   -> "ENQ"
     6   -> "ACK"
-    7   -> "BEL"   
-    8   -> "BS"    
-    9   -> "TAB"   
+    7   -> "BEL"
+    8   -> "BS"
+    9   -> "TAB"
     10  -> "LF"
     11  -> "VT"
     12  -> "FF"
-    13  -> "CR"    
+    13  -> "CR"
     14  -> "SO"
     15  -> "SI"
     16  -> "DLE"
@@ -50,15 +49,15 @@ asciiSpecial n = case n of
     23  -> "ETB"
     24  -> "CAN"
     25  -> "EM"
-    26  -> "SUB" 
-    27  -> "ESC"   -- Escape
+    26  -> "SUB"
+    27  -> "ESC"
     28  -> "FS"
     29  -> "GS"
     30  -> "RS"
     31  -> "US"
-    32  -> "SPACE" -- Пробел
-    127 -> "DEL"   -- Удаление
-    _   -> [chr n] -- Все остальные символы
+    32  -> "SPACE"
+    127 -> "DEL"
+    _   -> [chr n]
 
 -- Функция для вывода символа по коду
 printSymbol :: Int -> String

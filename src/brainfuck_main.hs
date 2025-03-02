@@ -9,11 +9,9 @@ type Memory = [Int]
 
 data BFState = BFState { code :: String, pointer :: Int, memory :: Memory, pc :: Int }
 
--- Начальное состояние
 initState :: String -> BFState
 initState code = BFState code 0 (repeat 0) 0
 
--- Выполнение программы Brainfuck
 runBrainfuck :: BFState -> IO ()
 runBrainfuck state@(BFState code ptr mem pc)
     | pc >= length code = return ()
