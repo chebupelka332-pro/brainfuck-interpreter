@@ -42,9 +42,14 @@ runBrainfuck state@(BFState code ptr mem pc size wrap)
                 else runBrainfuck state { pc = pc + 1 }
         _   -> runBrainfuck state { pc = pc + 1 }
     where
-        movePointer p = if wrap then (p `mod` size) else max 0 (min (size - 1) p)
+        movePointer p
+            | wrap = (p + size) `mod` size
+            | not wrap && (p >= size || p < 0) = error "Error: ptr is out of range" 
+            | otherwise = max 0 (min (size - 1) p)
 
-        updateCell f = take ptr mem ++ [f (mem !! ptr)] ++ drop (ptr + 1) mem
+        updateCell f = take wrappedPtr mem ++ [f (mem !! wrappedPtr)] ++ drop (wrappedPtr + 1) mem
+            where
+                wrappedPtr = if wrap then (ptr + size) `mod` size else ptr
 
         findMatchingBracket :: Int -> Int -> Int
         findMatchingBracket pos dir = go (pos + dir) 0
